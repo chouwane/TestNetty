@@ -1,0 +1,9 @@
+.svn
+.class
+.classpath
+.project
+.settings/
+target/
+HFP_SERVER_LOG_IS_UNDEFINED/
+logs/
+*.iml
