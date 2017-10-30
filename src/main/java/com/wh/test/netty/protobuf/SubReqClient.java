@@ -3,6 +3,8 @@ package com.wh.test.netty.protobuf;
 import com.wh.test.netty.MessagePack.EchoClientHandler;
 import com.wh.test.netty.MessagePack.MsgpackDecoder;
 import com.wh.test.netty.MessagePack.MsgpackEncoder;
+import com.wh.test.netty.protobuf.customer.CustomProtobufDecoder;
+import com.wh.test.netty.protobuf.customer.CustomProtobufEncoder;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -37,7 +39,7 @@ public class SubReqClient {
                         @Override
                         protected void initChannel(SocketChannel ch) throws Exception {
 
-                            //处理半包
+                            /*//处理半包
                             ch.pipeline().addLast(new ProtobufVarint32FrameDecoder());
                             //解码
                             ch.pipeline().addLast(new ProtobufDecoder(SubscribeRespProto.SubscribeResp.getDefaultInstance()));
@@ -45,7 +47,10 @@ public class SubReqClient {
                             //
                             ch.pipeline().addLast(new ProtobufVarint32LengthFieldPrepender());
                             //编码
-                            ch.pipeline().addLast(new ProtobufEncoder());
+                            ch.pipeline().addLast(new ProtobufEncoder());*/
+
+                            ch.pipeline().addLast(new CustomProtobufDecoder());
+                            ch.pipeline().addLast(new CustomProtobufEncoder());
 
                             ch.pipeline().addLast(new SubReqClientHandler());
 

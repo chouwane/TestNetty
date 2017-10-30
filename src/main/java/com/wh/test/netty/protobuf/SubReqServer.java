@@ -1,6 +1,8 @@
 package com.wh.test.netty.protobuf;
 
 import com.wh.test.netty.delimiter.EchoServerHandler;
+import com.wh.test.netty.protobuf.customer.CustomProtobufDecoder;
+import com.wh.test.netty.protobuf.customer.CustomProtobufEncoder;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -41,11 +43,14 @@ public class SubReqServer {
                         @Override
                         protected void initChannel(SocketChannel ch) throws Exception {
 
-                            ch.pipeline().addLast(new ProtobufVarint32FrameDecoder());
+                            /*ch.pipeline().addLast(new ProtobufVarint32FrameDecoder());
                             ch.pipeline().addLast(new ProtobufDecoder(SubscribeReqProto.SubscribeReq.getDefaultInstance()));
 
                             ch.pipeline().addLast(new ProtobufVarint32LengthFieldPrepender());
-                            ch.pipeline().addLast(new ProtobufEncoder());
+                            ch.pipeline().addLast(new ProtobufEncoder());*/
+
+                            ch.pipeline().addLast(new CustomProtobufDecoder());
+                            ch.pipeline().addLast(new CustomProtobufEncoder());
 
                             ch.pipeline().addLast(new SubReqServerHandler());
                         }
