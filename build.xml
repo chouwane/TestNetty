@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project default="main" basedir=".">
+    <path id="classpath">
+        <dirset dir="${basedir}/target/classes" />
+        <!--<dirset dir="${basedir}/target/test-classes" />-->
+        <fileset dir="/home/wanghui/wh/software/jibx/lib" includes="*.jar"/>
+        <pathelement location="bin"/>
+    </path>
+
+    <target name="main" depends="compile,bindgenOrder,jibx-binding" description="Main target" />
+
+    <target name="compile" description="Compilation target">
+        <echo>Building file.</echo>
+        <javac srcdir="${basedir}/src/main/java" destdir="${basedir}/target/classes" includeantruntime="true" />
+    </target>
+
+    <target name="bindgenOrder" >
+        <echo message="Running BindingGenerator tool" />
+        <java classpathref="classpath" fork="true" failonerror="true" classname="org.jibx.binding.BindingGenerator">
+            <arg value="com.wh.test.netty.http.xml.pojo.Address" />
+            <arg value="com.wh.test.netty.http.xml.pojo.Customer" />
+            <arg value="com.wh.test.netty.http.xml.pojo.Shipping" />
+            <arg value="com.wh.test.netty.http.xml.pojo.Order" />
+        </java>
+    </target>
+
+    <taskdef name="bind" classname="org.jibx.binding.ant.CompileTask">
+        <classpath refid="classpath"/>
+    </taskdef>
+    <target name="jibx-binding">
+        <bind verbose="false" load="true" binding="${basedir}/binding.xml">
+            <classpath refid="classpath"/>
+        </bind>
+    </target>
+
+
+    <!--- http://jibx.sourceforge.net/fromcode/bindgen.html
+        在工程目录下生成binding.xml、pojo.xsd
+        使用1.3.1的版本
+     -->
+    <target name="bindgen">
+
+        <echo message="Running BindGen tool"/>
+        <java classpathref="classpath" fork="true" failonerror="true"
+              classname="org.jibx.binding.generator.BindGen">
+
+            <arg value="-s"/>
+            <arg value="src"/>
+
+            <arg value="-t"/>
+            <arg value="src/main/resource"/>
+
+            <arg value="com.wh.test.netty.http.xml.pojo.Order"/>
+        </java>
+
+    </target>
+
+</project>
