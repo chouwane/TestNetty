@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WebSocket Client</title>
+</head>
+<body>
+    <p>Netty WebSocket 时间服务</p>
+    <div>
+        <input type="text" id="senContent" value="Netty 最佳实践">
+        <button id="sendBtn" onclick="sendMsg()">发送Websocket请求消息</button>
+        <hr/>
+        <p id="status"></p>
+    </div>
+
+<script type="text/javascript">
+    var wsUri ="ws://localhost:8081/websocket";
+    var output = document.getElementById("status");
+
+    //检查浏览器是否支持WebSocket
+    if(window.WebSocket){
+        console.log('This browser supports WebSocket');
+
+        testWebSocket();
+
+    }else{
+        console.log('This browser does not supports WebSocket');
+    }
+
+
+    var content = document.getElementById('senContent');
+    function sendMsg() {
+        doSend(content.value);
+    }
+
+
+    function testWebSocket() {
+        websocket = new WebSocket(wsUri);
+        websocket.onopen = function(evt) {
+            onOpen(evt)
+        };
+        websocket.onclose = function(evt) {
+            onClose(evt)
+        };
+        websocket.onmessage = function(evt) {
+            onMessage(evt)
+        };
+        websocket.onerror = function(evt) {
+            onError(evt)
+        };
+    }
+
+    function onOpen(evt) {
+        writeToScreen("CONNECTED");
+        doSend("WebSocket rocks");
+    }
+
+    function onClose(evt) {
+        writeToScreen("DISCONNECTED");
+    }
+
+    function onMessage(evt) {
+        console.log(evt.data);
+        writeToScreen('<span style="color: blue;">RESPONSE: '+ evt.data+'</span>');
+        //websocket.close();
+    }
+
+    function onError(evt) {
+        writeToScreen('<span style="color: red;">ERROR:</span> '+ evt.data);
+    }
+
+    function doSend(message) {
+        writeToScreen("SENT: " + message);
+        websocket.send(message);
+    }
+
+    function writeToScreen(message) {
+        var pre = document.createElement("p");
+        pre.style.wordWrap = "break-word";
+        pre.innerHTML = message;
+        output.appendChild(pre);
+    }
+
+    //window.addEventListener("load", init, false);
+
+</script>
+
+</body>
+</html>
